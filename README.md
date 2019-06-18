@@ -25,11 +25,9 @@ python3.7 setup.py install
 ```
 
 6. test
-  1. install bimpy
-    ```pip3.7 install bimpy```
-
-  2. install OpenGL  ```pip3.7 install pyopengl```
-  3. run ```python3.7 tester.py```
+  install bimpy```pip3.7 install bimpy```
+  install OpenGL  ```pip3.7 install pyopengl```
+  run ```python3.7 tester.py```
 
 ---
 
