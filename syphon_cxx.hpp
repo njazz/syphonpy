@@ -28,6 +28,7 @@ struct _serverOpaquePtr;
 struct _clientOpaquePtr;
 struct _serverOptionsOpaquePtr;
 struct _serverDescriptionOpaquePtr;
+struct _imageOpaquePtr;
 
 // ---
 
@@ -98,9 +99,13 @@ using NewFrameHandlerFunc = std::function<void(ClientPtr)>;
 const NewFrameHandlerFunc emptyFrameHandler = [](ClientPtr) {};
 
 // ---
-struct Image {
-    GLuint textureName;
-    Size textureSize;
+class Image {
+    _imageOpaquePtr *_obj = nullptr;
+public:
+    Image(_imageOpaquePtr *i = nullptr);
+    ~Image();
+    GLuint textureName();
+    Size textureSize();
 };
 
 // ---
