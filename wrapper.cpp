@@ -73,8 +73,8 @@ PYBIND11_MODULE(syphonpy, m)
 
     // ---
     py::class_<Wrapper::Image>(m, "Image")
-        .def_readwrite("texture_name", &Wrapper::Image::textureName)
-        .def_readwrite("texture_size", &Wrapper::Image::textureSize)
+        .def("texture_name", &Wrapper::Image::textureName)
+        .def("texture_size", &Wrapper::Image::textureSize)
         //
         ;
 

@@ -25,7 +25,11 @@ struct _serverOpaquePtr {
     SyphonServer* obj = nil;
     _serverOpaquePtr(SyphonServer* o)
     {
-        obj = o;
+        obj = [o retain];
+    }
+    ~_serverOpaquePtr()
+    {
+        [obj release];
     }
 };
 
@@ -33,7 +37,11 @@ struct _clientOpaquePtr {
     SyphonClient* obj = nil;
     _clientOpaquePtr(SyphonClient* o)
     {
-        obj = o;
+        obj = [o retain];
+    }
+    ~_clientOpaquePtr()
+    {
+        [obj release];
     }
 };
 
@@ -41,15 +49,47 @@ struct _serverOptionsOpaquePtr {
     NSDictionary* obj = nil;
     _serverOptionsOpaquePtr(NSDictionary* o)
     {
-        obj = o;
+        obj = [o retain];
+    }
+    ~_serverOptionsOpaquePtr()
+    {
+        [obj release];
     }
 };
 
 struct _serverDescriptionOpaquePtr {
+private:
     NSDictionary* obj = nil;
+public:
     _serverDescriptionOpaquePtr(NSDictionary* o)
     {
-        obj = o;
+        obj = [o retain];
+    }
+    ~_serverDescriptionOpaquePtr()
+    {
+        [obj release];
+    }
+    NSDictionary *get() const
+    {
+        return obj;
+    }
+    void set(NSDictionary *d)
+    {
+        [d retain];
+        [obj release];
+        obj = d;
+    }
+};
+
+struct _imageOpaquePtr {
+    SyphonImage *obj = nil;
+    _imageOpaquePtr(SyphonImage *o)
+    {
+        obj = [o retain];
+    }
+    ~_imageOpaquePtr()
+    {
+        [obj release];
     }
 };
 
@@ -71,12 +111,12 @@ ServerDescription::ServerDescription(_serverDescriptionOpaquePtr* d)
     else
         _ptr = d;
 
-    if (!d->obj)
-        _ptr->obj = @{};
+    if (!d->get())
+        d->set(@{});
 
-    UUID = toString(d->obj[SyphonServerDescriptionUUIDKey]);
-    Name = toString(d->obj[SyphonServerDescriptionNameKey]);
-    AppName = toString(d->obj[SyphonServerDescriptionAppNameKey]);
+    UUID = toString(d->get()[SyphonServerDescriptionUUIDKey]);
+    Name = toString(d->get()[SyphonServerDescriptionNameKey]);
+    AppName = toString(d->get()[SyphonServerDescriptionAppNameKey]);
 }
 
 ServerDescription::ServerDescription(const ServerDescription& src)
@@ -84,21 +124,24 @@ ServerDescription::ServerDescription(const ServerDescription& src)
     UUID = src.UUID;
     Name = src.Name;
     AppName = src.AppName;
-
-    _ptr = new _serverDescriptionOpaquePtr([src._ptr->obj copy]);
+    NSDictionary *dictionary = [src._ptr->get() copy];
+    _ptr = new _serverDescriptionOpaquePtr(dictionary);
+    [dictionary release]; // retained by _serverDescriptionOpaquePtr()
 }
 
 _serverDescriptionOpaquePtr* ServerDescription::toDictionary()
 {
     NSDictionary* d;
-    d = _ptr->obj;
+    d = _ptr->get();
 
-    NSMutableDictionary* _dict = [[d mutableCopy] retain];
+    NSMutableDictionary* _dict = [d mutableCopy];
     _dict[SyphonServerDescriptionUUIDKey] = toNSString(UUID);
     _dict[SyphonServerDescriptionNameKey] = toNSString(Name);
     _dict[SyphonServerDescriptionAppNameKey] = toNSString(AppName);
 
-    return new _serverDescriptionOpaquePtr([_dict copy]);
+    _serverDescriptionOpaquePtr *result = new _serverDescriptionOpaquePtr(_dict);
+    [_dict release]; // retained by _serverDescriptionOpaquePtr()
+    return result;
     ;
 }
 
@@ -113,6 +156,7 @@ Server::Server(std::string name)
     SyphonServer* srv = [[SyphonServer alloc] initWithName:n_ context:_context options:@{}];
 
     _obj = new _serverOpaquePtr(srv);
+    [srv release]; // retained by _serverOpaquePtr()
     if (!srv)
         _error = true;
 }
@@ -146,7 +190,6 @@ bool Server::hasClients()
 
 Server::~Server()
 {
-    _obj->obj = nil;
     delete _obj;
 }
 
@@ -186,9 +229,9 @@ Client::Client(ServerDescription descr, NewFrameHandlerFunc handler)
     _context = CGLGetCurrentContext();
 
     auto _opaque = descr.toDictionary();
-    NSDictionary* _dict = _opaque->obj;
+    NSDictionary* _dict = _opaque->get();
 
-    SyphonClient* cl = [[SyphonClient alloc] initWithServerDescription:[_dict copy]
+    SyphonClient* cl = [[SyphonClient alloc] initWithServerDescription:_dict
                                                                context:_context
                                                                options:nil
                                                        newFrameHandler:nil
@@ -207,13 +250,10 @@ Image Client::newFrameImage()
 {
     CGLSetCurrentContext(_context);
     SyphonImage* img = [_obj->obj newFrameImage];
-    Image ret;
-    ret.textureName = img.textureName;
-    Size size;
-    size.width = img.textureSize.width;
-    size.height = img.textureSize.height;
-    ret.textureSize = size;
-    [img retain];
+    _imageOpaquePtr *opaque = new _imageOpaquePtr(img);
+    [img release]; // retained by _imageOpaquePtr()
+    Image ret(opaque);
+
     return ret;
 }
 
@@ -245,9 +285,32 @@ ServerDescription Client::serverDescription()
 
 Client::~Client()
 {
-    _obj->obj = nil;
     delete _obj;
 }
+
+Image::Image(_imageOpaquePtr *i)
+{
+    _obj = i;
+}
+
+Image::~Image()
+{
+    delete _obj;
+}
+
+GLuint Image::textureName()
+{
+    return _obj->obj.textureName;
+}
+
+Size Image::textureSize()
+{
+    Size size;
+    size.width = _obj->obj.textureSize.width;
+    size.height = _obj->obj.textureSize.height;
+    return size;
+}
+
 }
 
 // ---
