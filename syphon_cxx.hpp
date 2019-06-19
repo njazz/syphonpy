@@ -82,6 +82,8 @@ public:
     ServerDescription serverDescription();
 
     bool hasClients();
+
+    void stop();
 };
 
 // ---

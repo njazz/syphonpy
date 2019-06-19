@@ -188,8 +188,14 @@ bool Server::hasClients()
     return [_obj->obj hasClients];
 }
 
+void Server::stop()
+{
+    [_obj->obj stop];
+}
+
 Server::~Server()
 {
+    [_obj->obj stop];
     delete _obj;
 }
 
@@ -285,6 +291,7 @@ ServerDescription Client::serverDescription()
 
 Client::~Client()
 {
+    [_obj->obj stop];
     delete _obj;
 }
 
