@@ -1,33 +1,35 @@
 # syphonpy
 Python bindings for the Syphon Framework (OSX)
 
-# installation
+---
 
-0. have [python3.7](https://www.python.org/downloads/release/python-370/), XCode and [cmake](https://cmake.org/install/) installed
+## Installation
 
-1. clone to your local machine
+0. Have [python3.7](https://www.python.org/downloads/release/python-370/), XCode and [cmake](https://cmake.org/install/) installed
 
-2. open terminal and cd .. to the clone
+1. Clone to your local machine
 
-3. update submodules
+2. Open terminal and cd .. to the clone
+
+3. Update submodules
 ```
 git submodule update --init --recursive
 ```
 
-4. build
+4. Build
 ```
 python3.7 setup.py build
 ```
 
-5. install
+5. Install
 ```
 python3.7 setup.py install
 ```
 
-6. test
-  install bimpy```pip3.7 install bimpy```
-  install OpenGL  ```pip3.7 install pyopengl```
-  run ```python3.7 tester.py```
+6. Test  
+  install bimpy```pip3.7 install bimpy```  
+  install OpenGL  ```pip3.7 install pyopengl```  
+  run ```python3.7 tester.py```  
 
 ---
 
