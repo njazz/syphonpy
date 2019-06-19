@@ -60,6 +60,7 @@ struct _serverOptionsOpaquePtr {
 struct _serverDescriptionOpaquePtr {
 private:
     NSDictionary* obj = nil;
+
 public:
     _serverDescriptionOpaquePtr(NSDictionary* o)
     {
@@ -69,11 +70,11 @@ public:
     {
         [obj release];
     }
-    NSDictionary *get() const
+    NSDictionary* get() const
     {
         return obj;
     }
-    void set(NSDictionary *d)
+    void set(NSDictionary* d)
     {
         [d retain];
         [obj release];
@@ -82,8 +83,8 @@ public:
 };
 
 struct _imageOpaquePtr {
-    SyphonImage *obj = nil;
-    _imageOpaquePtr(SyphonImage *o)
+    SyphonImage* obj = nil;
+    _imageOpaquePtr(SyphonImage* o)
     {
         obj = [o retain];
     }
@@ -124,7 +125,7 @@ ServerDescription::ServerDescription(const ServerDescription& src)
     UUID = src.UUID;
     Name = src.Name;
     AppName = src.AppName;
-    NSDictionary *dictionary = [src._ptr->get() copy];
+    NSDictionary* dictionary = [src._ptr->get() copy];
     _ptr = new _serverDescriptionOpaquePtr(dictionary);
     [dictionary release]; // retained by _serverDescriptionOpaquePtr()
 }
@@ -139,7 +140,7 @@ _serverDescriptionOpaquePtr* ServerDescription::toDictionary()
     _dict[SyphonServerDescriptionNameKey] = toNSString(Name);
     _dict[SyphonServerDescriptionAppNameKey] = toNSString(AppName);
 
-    _serverDescriptionOpaquePtr *result = new _serverDescriptionOpaquePtr(_dict);
+    _serverDescriptionOpaquePtr* result = new _serverDescriptionOpaquePtr(_dict);
     [_dict release]; // retained by _serverDescriptionOpaquePtr()
     return result;
     ;
@@ -159,6 +160,14 @@ Server::Server(std::string name)
     [srv release]; // retained by _serverOpaquePtr()
     if (!srv)
         _error = true;
+}
+
+Server::Server(const Server& src)
+{
+    _obj = new _serverOpaquePtr(src._obj->obj);
+    _error = src._error;
+    _context = src._context;
+    _name = src._name;
 }
 
 void Server::publishFrameTexture(GLuint texID, Rect _region, Size _size, bool flipped)
@@ -188,8 +197,14 @@ bool Server::hasClients()
     return [_obj->obj hasClients];
 }
 
+void Server::stop()
+{
+    [_obj->obj stop];
+}
+
 Server::~Server()
 {
+    [_obj->obj stop];
     delete _obj;
 }
 
@@ -246,11 +261,18 @@ Client::Client(ServerDescription descr, NewFrameHandlerFunc handler)
         _error = true;
 }
 
+Client::Client(const Client& src)
+{
+    _obj = new _clientOpaquePtr(src._obj->obj);
+    _error = src._error;
+    _context = src._context;
+}
+
 Image Client::newFrameImage()
 {
     CGLSetCurrentContext(_context);
     SyphonImage* img = [_obj->obj newFrameImage];
-    _imageOpaquePtr *opaque = new _imageOpaquePtr(img);
+    _imageOpaquePtr* opaque = new _imageOpaquePtr(img);
     [img release]; // retained by _imageOpaquePtr()
     Image ret(opaque);
 
@@ -285,12 +307,18 @@ ServerDescription Client::serverDescription()
 
 Client::~Client()
 {
+    [_obj->obj stop];
     delete _obj;
 }
 
-Image::Image(_imageOpaquePtr *i)
+Image::Image(_imageOpaquePtr* i)
 {
     _obj = i;
+}
+
+Image::Image(const Image& src)
+{
+    _obj = new _imageOpaquePtr(src._obj->obj);
 }
 
 Image::~Image()
@@ -310,7 +338,6 @@ Size Image::textureSize()
     size.height = _obj->obj.textureSize.height;
     return size;
 }
-
 }
 
 // ---
@@ -336,6 +363,5 @@ void ConvertToTexture(GLuint src, GLuint texture, int width, int height)
     gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, pixels);
 
     delete[] pixels;
-
 }
 };

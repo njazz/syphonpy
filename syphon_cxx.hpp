@@ -71,6 +71,7 @@ class Server {
 
 public:
     Server(std::string name);
+    Server(const Server& src);
     ~Server();
 
     void publishFrameTexture(GLuint texID, Rect region, Size size, bool flipped);
@@ -82,6 +83,8 @@ public:
     ServerDescription serverDescription();
 
     bool hasClients();
+
+    void stop();
 };
 
 // ---
@@ -103,6 +106,7 @@ class Image {
     _imageOpaquePtr *_obj = nullptr;
 public:
     Image(_imageOpaquePtr *i = nullptr);
+    Image(const Image& src);
     ~Image();
     GLuint textureName();
     Size textureSize();
@@ -119,6 +123,7 @@ class Client {
 
 public:
     Client(ServerDescription descr, NewFrameHandlerFunc handler = emptyFrameHandler);
+    Client(const Client& src);
     ~Client();
 
     Image newFrameImage();
