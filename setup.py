@@ -58,9 +58,9 @@ class CMakeBuild(build_ext):
 
 setup(
     name='syphonpy',
-    version='0.0.1',
-    # author='Dean Moldovan',
-    # author_email='dean0x7d@gmail.com',
+    version='0.0.2',
+    # author='TODO',
+    # author_email='TODO',
     description='A test project using pybind11 and CMake',
     long_description='',
     ext_modules=[CMakeExtension('syphonpy')],
