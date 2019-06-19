@@ -63,6 +63,7 @@ PYBIND11_MODULE(syphonpy, m)
         .def("has_clients", &Wrapper::Server::hasClients)
         //
         .def("stop", &Wrapper::Server::stop)
+        //
         ;
 
     // ---

@@ -103,8 +103,10 @@ while not ctx.should_close():
         # _tex = glGenTextures(1)
         img = client.new_frame_image()
         # glBindTexture(GL_TEXTURE_2D, _tex)
+        # print(img)
+        pass
 
-    if img and img.texture_size.width and img.texture_size.height:
+    if img and img.texture_size().width and img.texture_size().height:
 
         #
         # try:
@@ -126,11 +128,12 @@ while not ctx.should_close():
 
         # glCopyImageSubData(texture, GL_TEXTURE_RECTANGLE, 0, 0, 0, 0, arbTexture, GL_TEXTURE_2D, 0, 0, 0, 0, width, height, 1);
 
-        syphonpy.convert_to_texture(img.texture_name, _converted , int(img.texture_size.width), int(img.texture_size.height))
+        syphonpy.convert_to_texture(img.texture_name(), _converted , int(img.texture_size().width), int(img.texture_size().height))
+
         # glBindTexture(GL_TEXTURE_2D, 0)
 
         # glBindTexture(GL_TEXTURE_RECTANGLE, img.texture_name)
-        bimpy.image(_converted, bimpy.Vec2(img.texture_size.width,img.texture_size.height))
+        bimpy.image(_converted, bimpy.Vec2(img.texture_size().width,img.texture_size().height))
         # glBindTexture(GL_TEXTURE_RECTANGLE, 0)
 
         # glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -139,9 +142,12 @@ while not ctx.should_close():
         # except Exception as e:
         #     bimpy.text(str(e))
         #     pass
-        bimpy.text(str(img.texture_name))
-        bimpy.text("[{}x{}]".format(img.texture_size.width, img.texture_size.height))
-        # bimpy.text(client.context())
+        bimpy.text(str(img.texture_name()))
+        bimpy.text(str(_converted))
+        bimpy.text("[{}x{}]".format(img.texture_size().width, img.texture_size().height))
+        # bimpy.text(str(client.context()))
+
+        img = None
 
     bimpy.end()
     ctx.render()
