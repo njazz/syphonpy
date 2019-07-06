@@ -1,0 +1,12 @@
+language: generic
+sudo: required
+os: osx
+env: TOXENV=py36
+
+python:
+  - "3.6"
+  
+install:
+  - pip install wheel
+script:
+  - python setup.py bdist_wheel
