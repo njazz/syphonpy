@@ -1,7 +1,7 @@
 # syphonpy
+[![Build Status](https://travis-ci.org/njazz/syphonpy.svg?branch=master)](https://travis-ci.org/njazz/syphonpy)  
 Python bindings for the Syphon Framework (OSX)
 
----
 
 ## Installation
 
