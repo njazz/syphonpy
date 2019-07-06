@@ -1,6 +1,7 @@
 language: python
 sudo: required
-dist: trusty
+os: osx
+
 python:
   - "3.6"
   
