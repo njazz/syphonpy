@@ -1,6 +1,7 @@
-language: python
+language: generic
 sudo: required
 os: osx
+env: TOXENV=py36
 
 python:
   - "3.6"
