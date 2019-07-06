@@ -39,3 +39,12 @@ Syphon is an open source Mac OS X technology that allows applications to share v
 See http://syphon.v002.info for more information.
 
 This project hosts the Syphon.framework for developers who want to integrate Syphon in their own software. If you are looking for the Syphon plugins for Quartz Composer, Max/Jitter, FFGL, etc, the project for the Syphon Implementations currently at http://github.com/Syphon
+
+---
+## Acknowledgements  
+  
+https://github.com/bangnoise  
+https://github.com/maybites  
+https://github.com/egradman  
+
+
