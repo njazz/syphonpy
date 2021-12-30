@@ -2,8 +2,16 @@
 [![Build Status](https://travis-ci.org/njazz/syphonpy.svg?branch=master)](https://travis-ci.org/njazz/syphonpy)  
 Python bindings for the Syphon Framework (OSX)
 
-
 ## Installation
+
+A prebuilt version is hosted on PyPI and available to install with pip:
+
+```
+pip install syphonpy
+```
+
+
+## Build
 
 0. Have [python3.7](https://www.python.org/downloads/release/python-370/), XCode and [cmake](https://cmake.org/install/) installed
 
@@ -26,10 +34,12 @@ python3.7 setup.py build
 python3.7 setup.py install
 ```
 
-6. Test  
-  install bimpy```pip3.7 install bimpy```  
-  install OpenGL  ```pip3.7 install pyopengl```  
-  run ```python3.7 tester.py```  
+# Test
+
+install bimpy```pip3.7 install bimpy```  
+install OpenGL  ```pip3.7 install pyopengl``` 
+install OpenGL  ```pip3.7 install numpy``` 
+run ```python3.7 tester.py```  
 
 ---
 
@@ -46,5 +56,5 @@ This project hosts the Syphon.framework for developers who want to integrate Syp
 https://github.com/bangnoise  
 https://github.com/maybites  
 https://github.com/egradman  
-
+https://github.com/cansik
 
