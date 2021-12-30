@@ -1,0 +1,54 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version Tag'
+        required: false
+        default: '0.0.2-test'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ 'macos-11' ] # 'macos-10.15',
+        python-version: [ '3.8' ] # '3.6', '3.7', '3.8', '3.9', '3.10'
+
+    runs-on: ${{ matrix.os }}
+
+    name: ${{ github.event.inputs.tag }} python ${{ matrix.python-version }} on ${{ matrix.os }}
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Switch to Workspace
+        run: |
+          echo ${{ github.workspace }}
+          cd ${{ github.workspace }}
+
+      - name: Preqrequisites
+        run: |
+          git submodule update --init --recursive
+
+      # run build command
+      - name: Build syphonpy
+        run: |
+          python -m pip install wheel
+          python setup.py bdist_wheel
+          ls dist
+
+      # upload dist
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/*.whl
+          tag: ${{ github.event.inputs.tag }}
+          release_name: "Version ${{ github.event.inputs.tag }}"
+          body: "Prebuilt syphonpy wheel packages version ${{ github.event.inputs.tag }}."
+          overwrite: true
+          file_glob: true
