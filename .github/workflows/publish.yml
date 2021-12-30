@@ -34,7 +34,7 @@ jobs:
           ls dist
 
     - name: Publish package
-      if: ${{ false }}
+      # if: ${{ false }}
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
         user: __token__
