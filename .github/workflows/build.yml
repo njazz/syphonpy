@@ -6,7 +6,7 @@ on:
       tag:
         description: 'Version Tag'
         required: false
-        default: '0.0.2-test'
+        default: 'v0.0.2'
 
 jobs:
   build:
