@@ -34,12 +34,12 @@ python3.7 setup.py build
 python3.7 setup.py install
 ```
 
-# Test
+## Test
 
-install bimpy```pip3.7 install bimpy```  
-install OpenGL  ```pip3.7 install pyopengl``` 
-install OpenGL  ```pip3.7 install numpy``` 
-run ```python3.7 tester.py```  
+- install bimpy```pip3.7 install bimpy```  
+- install OpenGL  ```pip3.7 install pyopengl``` 
+- install numpy  ```pip3.7 install numpy``` 
+- run ```python3.7 tester.py```  
 
 ---
 
