@@ -8,6 +8,8 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
+from pathlib import Path
+
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
@@ -56,13 +58,18 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
+# read readme
+this_directory = Path(__file__).parent
+long_description = (this_directory / "readme.md").read_text()
+
 setup(
     name='syphonpy',
     version='0.0.2',
     # author='TODO',
     # author_email='TODO',
-    description='A test project using pybind11 and CMake',
-    long_description='',
+    description='Python bindings for the Syphon Framework (OSX).',
+    long_description = long_description,
+    long_description_content_type="text/markdown",
     ext_modules=[CMakeExtension('syphonpy')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
