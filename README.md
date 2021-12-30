@@ -4,7 +4,7 @@ Python bindings for the Syphon Framework (OSX)
 
 ## Installation
 
-A prebuilt version is hosted on PyPI and available to install with pip:
+A prebuilt version is hosted on [PyPI](https://pypi.org/project/syphonpy/) and available to install with pip:
 
 ```
 pip install syphonpy
