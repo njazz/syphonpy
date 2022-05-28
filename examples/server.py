@@ -11,8 +11,8 @@ def main():
     size = (1280, 720)
 
     # window setup
-    server1 = Syphon.Server('RGB', size, hide=True)
-    server2 = Syphon.Server('Gray', size, hide=True)
+    server1 = Syphon.Server('RGB', size, show=False)
+    server2 = Syphon.Server('Gray', size, show=False)
 
 
     cap = cv2.VideoCapture(1)
