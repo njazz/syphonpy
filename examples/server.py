@@ -1,7 +1,6 @@
 
 import cv2
 import Syphon
-
 import glfw
 
 def main():
@@ -10,8 +9,8 @@ def main():
     size = (1280, 720)
 
     # window setup
-    server1 = Syphon.Server('RGB', size, show=False)
-    server2 = Syphon.Server('Gray', size, show=False)
+    server1 = Syphon.Server("Server RGB", size, show=False) # Syphon.Server("window and syphon server name", frame size, show)
+    server2 = Syphon.Server("Server Gray", size, show=False)
 
 
     cap = cv2.VideoCapture(1)
@@ -27,7 +26,7 @@ def main():
         frame_gray = cv2.cvtColor(frame_gray, cv2.COLOR_GRAY2RGB) # GRAY (3 channels)
         
         cv2.imshow("rgb", frame)
-        server1.draw_and_send(frame_rgb)
+        server1.draw_and_send(frame_rgb) # Syphon.Server.draw_and_send(frame) draw frame using opengl and send it to syphon
         
         cv2.imshow("gray", frame_gray)
         server2.draw_and_send(frame_gray)
@@ -40,5 +39,5 @@ def main():
     exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
