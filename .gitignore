@@ -1,6 +1,7 @@
 build/
 dist/
 syphonpy.egg-info/
+**/__pycache__/
 
 *.user
 xcuserdata
